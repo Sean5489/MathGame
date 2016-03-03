@@ -1,5 +1,6 @@
 package com.sean.mathgame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,7 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button button;
 
@@ -31,10 +32,24 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        addListenerOnButtonNewGame();
+        button = (Button)findViewById(R.id.buttonNewGame);
+        button.setOnClickListener(this);
+       // addListenerOnButtonNewGame(); TEST*******
     }
 
+    private void buttonClick(){
+        startActivity(new Intent("MathGame.Activity2"));
+
+    }
+
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.buttonNewGame:
+                buttonClick();
+                break;
+        }
+/* TEST********
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -57,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addListenerOnButtonNewGame() {
+    /*public void addListenerOnButtonNewGame() {
         button = (Button) findViewById(R.id.buttonNewGame);
 
         button.setOnClickListener(new OnClickListener() {
@@ -68,6 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Welcome to this math game", Toast.LENGTH_SHORT).show();
 
             }
-        });
+        }); TEST******/
     }
 }
