@@ -1,6 +1,7 @@
 package com.sean.mathgame;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,10 +9,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class Activity2 extends AppCompatActivity implements View.OnClickListener {
 
+    Button button;
     Button button1;
+    Button button2;
+    Button button3;
+    Button button4;
+    TextView scoreText;
+    int score = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +37,23 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
                         .setAction("Action", null).show();
             }
         });
+
+        button = (Button)findViewById(R.id.button);
+        button.setOnClickListener(this);
+
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
+
+        button2 = (Button)findViewById(R.id.button2);
+        button2.setOnClickListener(this);
+
+        button3 = (Button)findViewById(R.id.button3);
+        button3.setOnClickListener(this);
+
+        button4 = (Button)findViewById(R.id.button4);
+        button4.setOnClickListener(this);
+
+        scoreText = (TextView) findViewById(R.id.scoreText);
     }
 
     private void button1Click(){
@@ -39,11 +63,54 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
 
     }
 
+    private void buttonClick(){
+        button.setBackgroundColor(Color.RED);
+        button.setEnabled(false);
+    }
+
+    private void button2Click(){
+        button2.setBackgroundColor(Color.RED);
+        button2.setEnabled(false);
+    }
+
+    private void button3Click(){
+        if(button.isEnabled() == false) {
+            score = 7;
+        } else {
+            score = 10;
+        }
+
+        button3.setBackgroundColor(Color.GREEN);
+        scoreText.setText("Score: " + Integer.toString(score));
+    }
+
+    private void button4Click(){
+        button4.setBackgroundColor(Color.RED);
+        button4.setEnabled(false);
+    }
+
+
     public void onClick(View v) {
         switch (v.getId())
         {
+            case R.id.button:
+                buttonClick();
+                break;
+
             case R.id.button1:
                 button1Click();
+                break;
+
+            case R.id.button2:
+                button2Click();
+                break;
+
+            case R.id.button3:
+                button3Click();
+                break;
+
+            case R.id.button4:
+                button4Click();
                 break;
         }
 
