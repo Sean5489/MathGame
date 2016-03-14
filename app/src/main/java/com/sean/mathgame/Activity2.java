@@ -20,7 +20,7 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
     Button button3;
     Button button4;
     TextView scoreText;
-    int score = 0;
+    double score = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,27 +66,27 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
     private void buttonClick(){
         button.setBackgroundColor(Color.RED);
         button.setEnabled(false);
+        score = score - 2.5;
     }
 
     private void button2Click(){
         button2.setBackgroundColor(Color.RED);
         button2.setEnabled(false);
+        score = score - 2.5;
     }
 
     private void button3Click(){
-        if(button.isEnabled() == false) {
-            score = 7;
-        } else {
-            score = 10;
-        }
-
+        // Sean update this code
         button3.setBackgroundColor(Color.GREEN);
-        scoreText.setText("Score: " + Integer.toString(score));
+        scoreText.setText("Score: " + Double.toString(score));
+        Toast.makeText(Activity2.this,
+                "Correct!", Toast.LENGTH_SHORT).show();
     }
 
-    private void button4Click(){
+    private void button4Click() {
         button4.setBackgroundColor(Color.RED);
         button4.setEnabled(false);
+        score = score - 2.5;
     }
 
 
