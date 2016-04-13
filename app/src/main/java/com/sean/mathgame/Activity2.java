@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,8 +20,13 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
     Button button2;
     Button button3;
     Button button4;
+    EditText questionText;
     TextView scoreText;
     double score = 10;
+
+    Answer[] answers = new Answer[4];
+    MultChoice pool1 = new MultChoice();
+    MultChoice question = new MultChoice();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +34,17 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        answers[0] = new Answer("(1, 4)", false);
+        answers[1] = new Answer("(-1, 4)", false);
+        answers[2] = new Answer("(1, -4)", true);
+        answers[3] = new Answer("(-1, 0)", false);
+
+        pool1.setChoice(answers);
+
+        question.setQuestion("y = -4x + 7");
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -37,21 +54,26 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
                         .setAction("Action", null).show();
             }
         });
+        questionText = (EditText)findViewById(R.id.editText);
+        questionText.setText(question.getQuestion());
 
-        button = (Button)findViewById(R.id.button);
-        button.setOnClickListener(this);
 
         button1 = (Button)findViewById(R.id.button1);
         button1.setOnClickListener(this);
 
+        // Answer buttons
+        button = (Button)findViewById(R.id.button);
+        pool1.setupButton(button, 0, this);
+
         button2 = (Button)findViewById(R.id.button2);
-        button2.setOnClickListener(this);
+        pool1.setupButton(button2, 1, this);
 
         button3 = (Button)findViewById(R.id.button3);
-        button3.setOnClickListener(this);
+        pool1.setupButton(button3, 2, this);
 
         button4 = (Button)findViewById(R.id.button4);
-        button4.setOnClickListener(this);
+        pool1.setupButton(button4, 1, this);
+
 
         scoreText = (TextView) findViewById(R.id.scoreText);
     }
@@ -63,38 +85,29 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    private void buttonClick(){
-        button.setBackgroundColor(Color.RED);
+    private void buttonClick(Button button, Boolean correctness){
         button.setEnabled(false);
-        score = score - 2.5;
-    }
+        if (!correctness) {
+            button.setBackgroundColor(Color.RED);
+            score = score - 2.5;
+        } else {
+            button.setBackgroundColor(Color.GREEN);
+            scoreText.setText("Score: " + Double.toString(score));
 
-    private void button2Click(){
-        button2.setBackgroundColor(Color.RED);
-        button2.setEnabled(false);
-        score = score - 2.5;
+            this.button.setEnabled(false);
+            button2.setEnabled(false);
+            button3.setEnabled(false);
+            button4.setEnabled(false);
+            Toast.makeText(Activity2.this,
+                    "Correct!", Toast.LENGTH_SHORT).show();
+        }
     }
-
-    private void button3Click(){
-        // Sean update this code
-        button3.setBackgroundColor(Color.GREEN);
-        scoreText.setText("Score: " + Double.toString(score));
-        Toast.makeText(Activity2.this,
-                "Correct!", Toast.LENGTH_SHORT).show();
-    }
-
-    private void button4Click() {
-        button4.setBackgroundColor(Color.RED);
-        button4.setEnabled(false);
-        score = score - 2.5;
-    }
-
 
     public void onClick(View v) {
         switch (v.getId())
         {
             case R.id.button:
-                buttonClick();
+                buttonClick(button, answers[0].getCorrectness());
                 break;
 
             case R.id.button1:
@@ -102,15 +115,15 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.button2:
-                button2Click();
+                buttonClick(button2, answers[1].getCorrectness());
                 break;
 
             case R.id.button3:
-                button3Click();
+                buttonClick(button3, answers[2].getCorrectness());
                 break;
 
             case R.id.button4:
-                button4Click();
+                buttonClick(button4, answers[3].getCorrectness());
                 break;
         }
 
