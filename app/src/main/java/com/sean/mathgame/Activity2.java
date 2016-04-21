@@ -1,6 +1,7 @@
 package com.sean.mathgame;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,11 +23,22 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
     Button button4;
     EditText questionText;
     TextView scoreText;
-    double score = 10;
+    double score;
+    double scoreTotal;
 
-    Answer[] answers = new Answer[4];
-    MultChoice pool1 = new MultChoice();
-    MultChoice question = new MultChoice();
+    int questionNumber = 0;
+
+    MultChoice pool0 = new MultChoice("y = -4x + 7", "(1, 4)", false, "(-1, 4)", false, "(1, -4)", true, "(-1, 0)", false);
+    MultChoice pool1 = new MultChoice("3 x 5", "10", false, "15", true, "25", false, "35", false);
+    MultChoice pool2 = new MultChoice("1 x 5", "1", false, "2", false, "3", false, "5", true);
+    MultChoice pool3 = new MultChoice("20 x 4", "80", true, "75", false, "60", false, "150", false);
+
+    MultChoice[] multChoicePool = new MultChoice[4];
+
+    MultChoice currentQuestion = new MultChoice();
+
+    double highestScore = 10 * multChoicePool.length;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +46,6 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        answers[0] = new Answer("(1, 4)", false);
-        answers[1] = new Answer("(-1, 4)", false);
-        answers[2] = new Answer("(1, -4)", true);
-        answers[3] = new Answer("(-1, 0)", false);
-
-        pool1.setChoice(answers);
-
-        question.setQuestion("y = -4x + 7");
-
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -54,26 +55,27 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
                         .setAction("Action", null).show();
             }
         });
-        questionText = (EditText)findViewById(R.id.editText);
-        questionText.setText(question.getQuestion());
 
-
-        button1 = (Button)findViewById(R.id.button1);
-        button1.setOnClickListener(this);
-
+        questionText = (EditText) findViewById(R.id.editText);
+        button1 = (Button) findViewById(R.id.button1);
         // Answer buttons
-        button = (Button)findViewById(R.id.button);
-        pool1.setupButton(button, 0, this);
+        button  = (Button) findViewById(R.id.button);
+        button2 = (Button) findViewById(R.id.button2);
+        button3 = (Button) findViewById(R.id.button3);
+        button4 = (Button) findViewById(R.id.button4);
 
-        button2 = (Button)findViewById(R.id.button2);
-        pool1.setupButton(button2, 1, this);
+        button.setOnClickListener(this);
+        button2.setOnClickListener(this);
+        button3.setOnClickListener(this);
+        button4.setOnClickListener(this);
 
-        button3 = (Button)findViewById(R.id.button3);
-        pool1.setupButton(button3, 2, this);
+        multChoicePool[0] = pool0;
+        multChoicePool[1] = pool1;
+        multChoicePool[2] = pool2;
+        multChoicePool[3] = pool3;
 
-        button4 = (Button)findViewById(R.id.button4);
-        pool1.setupButton(button4, 1, this);
-
+        questionNumber = 0;
+        initializeActivityForNewQuestion(multChoicePool[questionNumber]);
 
         scoreText = (TextView) findViewById(R.id.scoreText);
     }
@@ -82,32 +84,69 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         Intent intent = new Intent(Activity2.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-
     }
 
-    private void buttonClick(Button button, Boolean correctness){
+    /**
+     * This method will
+     */
+
+    private void initializeActivityForNewQuestion(MultChoice question) {
+        questionText.setText(question.getQuestion());
+
+        button.setText(question.getChoice()[0].getAnswer());
+        button2.setText(question.getChoice()[1].getAnswer());
+        button3.setText(question.getChoice()[2].getAnswer());
+        button4.setText(question.getChoice()[3].getAnswer());
+
+        button.setBackgroundColor(Color.LTGRAY);
+        button2.setBackgroundColor(Color.LTGRAY);
+        button3.setBackgroundColor(Color.LTGRAY);
+        button4.setBackgroundColor(Color.LTGRAY);
+
+        currentQuestion = question;
+
+        score = 10;
+    }
+
+    private void buttonClick(Button button, Boolean correctness) {
         button.setEnabled(false);
         if (!correctness) {
             button.setBackgroundColor(Color.RED);
             score = score - 2.5;
         } else {
             button.setBackgroundColor(Color.GREEN);
-            scoreText.setText("Score: " + Double.toString(score));
+            scoreTotal = score + scoreTotal;
+            scoreText.setText("Score: " + Double.toString(scoreTotal));
 
-            this.button.setEnabled(false);
-            button2.setEnabled(false);
-            button3.setEnabled(false);
-            button4.setEnabled(false);
-            Toast.makeText(Activity2.this,
-                    "Correct!", Toast.LENGTH_SHORT).show();
+            this.button.setEnabled(true);
+            button2.setEnabled(true);
+            button3.setEnabled(true);
+            button4.setEnabled(true);
+
+            questionNumber++;
+            if (questionNumber < multChoicePool.length) {
+                Toast.makeText(Activity2.this,
+                        "Correct!", Toast.LENGTH_SHORT).show();
+                initializeActivityForNewQuestion(multChoicePool[questionNumber]);
+            } else {
+                this.button.setEnabled(false);
+                button2.setEnabled(false);
+                button3.setEnabled(false);
+                button4.setEnabled(false);
+
+                Toast.makeText(Activity2.this,
+                        "Congratulations! You have completed the game. Final score is " + scoreTotal + " out of a possible " + highestScore + " points.", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     public void onClick(View v) {
+        Answer[] answerForCurrentQuestion = currentQuestion.getChoice();
+
         switch (v.getId())
         {
             case R.id.button:
-                buttonClick(button, answers[0].getCorrectness());
+                buttonClick(button, answerForCurrentQuestion[0].getCorrectness());
                 break;
 
             case R.id.button1:
@@ -115,15 +154,15 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.button2:
-                buttonClick(button2, answers[1].getCorrectness());
+                buttonClick(button2, answerForCurrentQuestion[1].getCorrectness());
                 break;
 
             case R.id.button3:
-                buttonClick(button3, answers[2].getCorrectness());
+                buttonClick(button3, answerForCurrentQuestion[2].getCorrectness());
                 break;
 
             case R.id.button4:
-                buttonClick(button4, answers[3].getCorrectness());
+                buttonClick(button4, answerForCurrentQuestion[3].getCorrectness());
                 break;
         }
 
