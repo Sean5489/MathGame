@@ -1,7 +1,6 @@
 package com.sean.mathgame;
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -14,7 +13,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Activity2 extends AppCompatActivity implements View.OnClickListener {
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class Multiplication extends AppCompatActivity implements View.OnClickListener {
 
     Button button;
     Button button1;
@@ -25,19 +27,19 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
     TextView scoreText;
     double score;
     double scoreTotal;
+    Timer timer = new Timer();
 
     int questionNumber = 0;
 
-    MultChoice pool0 = new MultChoice("y = -4x + 7", "(1, 4)", false, "(-1, 4)", false, "(1, -4)", true, "(-1, 0)", false);
-    MultChoice pool1 = new MultChoice("3 x 5", "10", false, "15", true, "25", false, "35", false);
-    MultChoice pool2 = new MultChoice("1 x 5", "1", false, "2", false, "3", false, "5", true);
-    MultChoice pool3 = new MultChoice("20 x 4", "80", true, "75", false, "60", false, "150", false);
-
-    MultChoice[] multChoicePool = new MultChoice[4];
+    MultChoice[] multChoiceMultiplication = new MultChoice[4];
+    MultChoice multiplication0 = new MultChoice("4 x 9", "25", false, "32", false, "36", true, "46", false);
+    MultChoice multiplication1 = new MultChoice("3 x 5", "10", false, "15", true, "25", false, "35", false);
+    MultChoice multiplication2 = new MultChoice("1 x 5", "1", false, "2", false, "3", false, "5", true);
+    MultChoice multiplication3 = new MultChoice("20 x 4", "80", true, "75", false, "60", false, "150", false);
 
     MultChoice currentQuestion = new MultChoice();
 
-    double highestScore = 10 * multChoicePool.length;
+    double highestScore = 10 * multChoiceMultiplication.length;
 
 
     @Override
@@ -46,18 +48,12 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_2);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        getSupportActionBar().setTitle(null);
 
         questionText = (EditText) findViewById(R.id.editText);
+        //Back button
         button1 = (Button) findViewById(R.id.button1);
+        button1.setOnClickListener(this);
         // Answer buttons
         button  = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
@@ -69,19 +65,19 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         button3.setOnClickListener(this);
         button4.setOnClickListener(this);
 
-        multChoicePool[0] = pool0;
-        multChoicePool[1] = pool1;
-        multChoicePool[2] = pool2;
-        multChoicePool[3] = pool3;
+        multChoiceMultiplication[0] = multiplication0;
+        multChoiceMultiplication[1] = multiplication1;
+        multChoiceMultiplication[2] = multiplication2;
+        multChoiceMultiplication[3] = multiplication3;
 
         questionNumber = 0;
-        initializeActivityForNewQuestion(multChoicePool[questionNumber]);
+        initializeActivityForNewQuestion(multChoiceMultiplication[questionNumber]);
 
         scoreText = (TextView) findViewById(R.id.scoreText);
     }
 
     private void button1Click(){
-        Intent intent = new Intent(Activity2.this, MainActivity.class);
+        Intent intent = new Intent(Multiplication.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
@@ -103,6 +99,12 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
         button3.setBackgroundColor(Color.LTGRAY);
         button4.setBackgroundColor(Color.LTGRAY);
 
+        button.setEnabled(true);
+        button1.setEnabled(true);
+        button2.setEnabled(true);
+        button3.setEnabled(true);
+        button4.setEnabled(true);
+
         currentQuestion = question;
 
         score = 10;
@@ -117,25 +119,50 @@ public class Activity2 extends AppCompatActivity implements View.OnClickListener
             button.setBackgroundColor(Color.GREEN);
             scoreTotal = score + scoreTotal;
             scoreText.setText("Score: " + Double.toString(scoreTotal));
-
-            this.button.setEnabled(true);
-            button2.setEnabled(true);
-            button3.setEnabled(true);
-            button4.setEnabled(true);
+            this.button.setEnabled(false);
+            button1.setEnabled(false);
+            button2.setEnabled(false);
+            button3.setEnabled(false);
+            button4.setEnabled(false);
 
             questionNumber++;
-            if (questionNumber < multChoicePool.length) {
-                Toast.makeText(Activity2.this,
+            if (questionNumber < multChoiceMultiplication.length) {
+                Toast.makeText(Multiplication.this,
                         "Correct!", Toast.LENGTH_SHORT).show();
-                initializeActivityForNewQuestion(multChoicePool[questionNumber]);
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initializeActivityForNewQuestion(multChoiceMultiplication[questionNumber]);
+                            }
+                        });
+                    }
+                }, 1500);
             } else {
                 this.button.setEnabled(false);
+                button1.setEnabled(false);
                 button2.setEnabled(false);
                 button3.setEnabled(false);
                 button4.setEnabled(false);
 
-                Toast.makeText(Activity2.this,
+                Toast.makeText(Multiplication.this,
                         "Congratulations! You have completed the game. Final score is " + scoreTotal + " out of a possible " + highestScore + " points.", Toast.LENGTH_LONG).show();
+
+                timer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(Multiplication.this, End.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                }, 1500);
             }
         }
     }

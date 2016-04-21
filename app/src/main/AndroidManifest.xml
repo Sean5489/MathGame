@@ -19,14 +19,37 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity2"
+            android:name=".Multiplication"
             android:label="@string/title_activity_2"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="MathGame.Activity2" />
+                <action android:name="MathGame.Multiplication" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".Addition"
+            android:label="@string/title_activity_2">
+            <intent-filter>
+                <action android:name="MathGame.Addition" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Subtraction"
+            android:label="@string/title_activity_2">
+            <intent-filter>
+                <action android:name="MathGame.Subtraction" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".End"
+            android:label="@string/title_activity_end"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -12,19 +12,46 @@
     tools:context="com.sean.mathgame.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="The Best Math Game"
-        android:id="@+id/textView2" />
+        android:text="Addition"
+        android:id="@+id/buttonAddition"
+        android:layout_marginTop="50dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignRight="@+id/buttonSubtraction"
+        android:layout_alignEnd="@+id/buttonSubtraction"
+        android:layout_alignLeft="@+id/buttonSubtraction"
+        android:layout_alignStart="@+id/buttonSubtraction" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Game"
-        android:id="@+id/buttonNewGame"
-        android:layout_below="@+id/textView2"
+        android:id="@+id/buttonSubtraction"
+        android:text="Subtraction"
+        android:layout_below="@+id/buttonAddition"
+        android:layout_alignLeft="@+id/buttonMultiplication"
+        android:layout_alignStart="@+id/buttonMultiplication"
+        android:layout_marginTop="40dp"
+        android:layout_alignRight="@+id/buttonMultiplication"
+        android:layout_alignEnd="@+id/buttonMultiplication" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Multiplication"
+        android:id="@+id/buttonMultiplication"
+        android:layout_below="@+id/buttonSubtraction"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="83dp" />
+        android:layout_marginTop="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Select math operation"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button button;
+    Button buttonAdd;
+    Button buttonSubtract;
+    Button buttonMultiply;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,31 +25,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        button = (Button)findViewById(R.id.buttonNewGame);
-        button.setOnClickListener(this);
+        buttonAdd = (Button)findViewById(R.id.buttonAddition);
+        buttonAdd.setOnClickListener(this);
+
+        buttonSubtract = (Button)findViewById(R.id.buttonSubtraction);
+        buttonSubtract.setOnClickListener(this);
+
+        buttonMultiply = (Button)findViewById(R.id.buttonMultiplication);
+        buttonMultiply.setOnClickListener(this);
        // addListenerOnButtonNewGame(); TEST*******
     }
 
-    private void buttonClick(){
-        startActivity(new Intent("MathGame.Activity2"));
+    private void buttonAddClick(){
+        startActivity(new Intent("MathGame.Addition"));
+
+    }
+
+    private void buttonSubtractClick(){
+        startActivity(new Intent("MathGame.Subtraction"));
+
+    }
+
+    private void buttonMultiplyClick(){
+        startActivity(new Intent("MathGame.Multiplication"));
 
     }
 
     public void onClick(View v) {
         switch (v.getId())
         {
-            case R.id.buttonNewGame:
-                buttonClick();
+            case R.id.buttonAddition:
+                buttonAddClick();
                 break;
+
+            case R.id.buttonSubtraction:
+                buttonSubtractClick();
+                break;
+
+            case R.id.buttonMultiplication:
+                buttonMultiplyClick();
+                break;
+
         }
 /* TEST********
     @Override
