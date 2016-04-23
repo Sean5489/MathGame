@@ -70,6 +70,8 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
         multChoiceMultiplication[2] = multiplication2;
         multChoiceMultiplication[3] = multiplication3;
 
+        MultChoice.shuffleArray(multChoiceMultiplication);
+
         questionNumber = 0;
         initializeActivityForNewQuestion(multChoiceMultiplication[questionNumber]);
 
