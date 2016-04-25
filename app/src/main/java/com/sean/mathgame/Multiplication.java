@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.util.Timer;
 import java.util.TimerTask;
 
+//This implements the multiplication class
 public class Multiplication extends AppCompatActivity implements View.OnClickListener {
 
     Button button;
@@ -31,6 +32,9 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
 
     int questionNumber = 0;
 
+    /**
+     * This sets up questions and answers for the multiplication portion of the game
+     */
     MultChoice[] multChoiceMultiplication = new MultChoice[4];
     MultChoice multiplication0 = new MultChoice("4 x 9", "25", false, "32", false, "36", true, "46", false);
     MultChoice multiplication1 = new MultChoice("3 x 5", "10", false, "15", true, "25", false, "35", false);
@@ -39,6 +43,7 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
 
     MultChoice currentQuestion = new MultChoice();
 
+    // This sets the highest score for the congratulatory toast at the end
     double highestScore = 10 * multChoiceMultiplication.length;
 
 
@@ -50,10 +55,13 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
+        //Allows for question to be edited
         questionText = (EditText) findViewById(R.id.editText);
+
         //Back button
         button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(this);
+
         // Answer buttons
         button  = (Button) findViewById(R.id.button);
         button2 = (Button) findViewById(R.id.button2);
@@ -65,19 +73,25 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
         button3.setOnClickListener(this);
         button4.setOnClickListener(this);
 
+        //Establishes an array of question sets
         multChoiceMultiplication[0] = multiplication0;
         multChoiceMultiplication[1] = multiplication1;
         multChoiceMultiplication[2] = multiplication2;
         multChoiceMultiplication[3] = multiplication3;
 
+        //Shuffles questions and answers
         MultChoice.shuffleArray(multChoiceMultiplication);
 
         questionNumber = 0;
         initializeActivityForNewQuestion(multChoiceMultiplication[questionNumber]);
 
+        //Allows for score to be edited
         scoreText = (TextView) findViewById(R.id.scoreText);
     }
 
+    /**
+     * This method allows for the Back button to bring the user back to the main screen
+     */
     private void button1Click(){
         Intent intent = new Intent(Multiplication.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -85,9 +99,10 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
     }
 
     /**
-     * This method will
+     * This method displays the question and the answer text on the buttons.
+     * It sets the answer buttons to a light gray color and re-enables them.
+     * Finally, it sets the question set to the variable currentQuestion and resets the score of the question set to 10.
      */
-
     private void initializeActivityForNewQuestion(MultChoice question) {
         questionText.setText(question.getQuestion());
 
@@ -112,6 +127,13 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
         score = 10;
     }
 
+    /**
+     * @param button Passes the pressed answer button, which is then disabled
+     * @param correctness Boolean which is true if answer is correct or false if incorrect for the given question
+     * If the correctness boolean is false, the button is set to a red background and the score is subtracted by 2.5
+     * If the correctness boolean is true, the button is set to a green background, the score is updated,
+     *  all of the buttons are set to false, and the question number is incremented by one
+     */
     private void buttonClick(Button button, Boolean correctness) {
         button.setEnabled(false);
         if (!correctness) {
@@ -128,6 +150,12 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
             button4.setEnabled(false);
 
             questionNumber++;
+            /**
+             * If the question number is less than the number of questions in the array, a toast appears which says "Correct!",
+             *  and a 1.5 second timer is run before a new question set appears.
+             * If the question number is equal to the number of questions in the array, a congratulatory toast appears and
+             *  a 1.5 second timer is run before proceeding to the End activity.
+             */
             if (questionNumber < multChoiceMultiplication.length) {
                 Toast.makeText(Multiplication.this,
                         "Correct!", Toast.LENGTH_SHORT).show();
@@ -169,6 +197,10 @@ public class Multiplication extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    /**
+     * This method is run when a button is pressed. It passes each button press to the buttonClick method (with the
+     * exception of button1, which is the back button)
+     */
     public void onClick(View v) {
         Answer[] answerForCurrentQuestion = currentQuestion.getChoice();
 

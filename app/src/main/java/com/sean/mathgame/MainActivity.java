@@ -13,6 +13,9 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * This implements the MainActivity class
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button buttonAdd;
@@ -27,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(null);
 
+        /**
+         * This establishes the three buttons in the activity: addition, subtraction, and multiplication
+         */
         buttonAdd = (Button)findViewById(R.id.buttonAddition);
         buttonAdd.setOnClickListener(this);
 
@@ -37,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonMultiply.setOnClickListener(this);
     }
 
+    /**
+     * These direct the user to their selected math operation after the button is pressed
+     */
     private void buttonAddClick(){
         startActivity(new Intent("MathGame.Addition"));
 
@@ -52,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * This is run for each button press, and starts the respective method for the given button
+     */
     public void onClick(View v) {
         switch (v.getId())
         {
